@@ -5,8 +5,7 @@
     _create: function() {
       var overlays = this.element.find('.navigation_site_detail'),
           that = this,
-          hasHomeButton = !!this.element.find('.navigation_home').length,
-          toggleIndicators = function() {};
+          hasHomeButton = !!this.element.find('.navigation_home').length;
 
       this.element.addClass('js').append(overlays);
 
@@ -15,21 +14,64 @@
       $('.navigation_bar_bottom', this.element)
         .append($('.navigation_bar_top > li', this.element).slice(hasHomeButton ? 4 : 3));
 
+
+      /* open menu magic */
+      var checkingForMouseDelta = false,
+        lastPosition,
+        openBarTimeout,
+        closeBarTimeout,
+        measuringDistance = 600;
+
+      $('body').on('mousemove', function(e) {
+        recentPosition = e.pageX;
+        var measuredDistance = that.element.offset().left - e.pageX;
+        if(measuredDistance < measuringDistance && !checkingForMouseDelta) {
+          checkingForMouseDelta = true;
+          lastPosition = e.pageX;
+
+          closeBarTimeout = setTimeout(function() {
+            that.element.removeClass('hover');
+            checkingForMouseDelta = false;
+          }, 2000);
+
+          openBarTimeout = setTimeout(function() {
+              if(recentPosition - lastPosition > 100 * (measuredDistance / measuringDistance) + 10) {
+                that.element.addClass('hover');
+
+              }
+              else {
+                checkingForMouseDelta = false;
+                clearTimeout(closeBarTimeout);
+              }
+          },50);
+        }
+      });
+
+      that.element.on('mouseenter', function() { that.element.addClass('hover'); clearTimeout(closeBarTimeout);});
+      that.element.on('mousemove', function() { clearTimeout(closeBarTimeout); });
+      that.element.on('mouseleave', function() { that.element.removeClass('hover'); checkingForMouseDelta = false; });
+
+      /*that.element.on('mousemove', function() {
+        clearTimeout(closeBarTimeout);
+        closeBarTimeout = setTimeout(function() {
+          that.element.removeClass('hover');
+        }, 500);
+      });*/
+
       /* Volume */
 
       var handlingVolume = false;
       var volumeBeforeMute = 1;
       var muteButton = $('.navigation_bg.navigation_mute', that.element);
-
       var changeVolume = function(event) {
-        var volume = (event.pageX - $('.volume-slider', that.element).offset().left) / $(('.volume-slider')).width();
+        var volume = 1 - (event.pageY - $('.volume-slider', that.element).offset().top) / $(('.volume-slider')).height();
         if (volume > 1) { volume = 1; }
         if (volume < 0) { volume = 0; }
         setVolume(volume);
       };
 
       var setVolume = function(volume) {
-        $('.volume-level', that.element).css({width: volume * 100 + "%"});
+        $('.volume-level', that.element).css({height: volume * 100 + "%"});
         pageflow.settings.set('volume', volume);
 
         if (volume === 0) {
@@ -59,7 +101,7 @@
       });
 
       $('.volume-level', this.element).css({
-        width: pageflow.settings.get("volume") * 100 + "%"
+        height: pageflow.settings.get("volume") * 100 + "%"
       });
 
       $('.navigation_volume_box', this.element).on("mousedown", function(event) {
@@ -106,7 +148,7 @@
       });
 
       /* pages */
-      var pageLinks = $('.navigation_thumbnails a', that.element),
+      var pageLinks = $('.navigation_dots a', that.element),
         target;
 
       function registerHandler() {
@@ -141,7 +183,8 @@
       pageLinks.each(function(index) {
         var handlerIn = function() {
           if (!('ontouchstart' in document.documentElement)) {
-            $(overlays[index]).css("top", $(this).offset().top).addClass('visible').removeClass('hidden');
+            var calculatedOffset = $(this).offset().top + $(overlays[index]).outerHeight() > $('.progress_navigation_bar').height() ? $('.progress_navigation_bar').height() - $(overlays[index]).outerHeight() : $(this).offset().top;
+            $(overlays[index]).css("top", calculatedOffset).addClass('visible').removeClass('hidden');
           }
         };
 
@@ -153,73 +196,32 @@
         });
       });
 
-      $(window).on('resize', function () {
-        $(overlays).css("top","0");
-        initiateIndicators();
-      });
+      resizeDots = function() {
+        var pageDotsMaxHeight = 20,
+        pageDotsMinHeight = 1,
+        maxBarHeight = $('#outer_wrapper').height() != null ? $('#outer_wrapper').height() : $('main').height(),
+        wantedHeight = maxBarHeight / pageLinks.length,
+        appliedHeight = pageDotsMinHeight;
 
-      var initiateIndicators = function() {
-        setTimeout(function() {
-          $('.scroll_indicator', that.element).show();
-          toggleIndicators();
-        }, 500);
+
+        if(wantedHeight <= pageDotsMaxHeight && wantedHeight > pageDotsMinHeight) {
+          appliedHeight = wantedHeight;
+        }
+        else if(wantedHeight > pageDotsMinHeight) {
+          appliedHeight = pageDotsMaxHeight;
+        }
+
+        $('.navigation_dots > li').css('height', appliedHeight + 'px');
       };
 
+      resizeDots();
+
+      $(window).on('resize', function () {
+        $(overlays).css("top","0");
+        resizeDots();
+      });
+
       $('.scroller', this.element).each(function () {
-        var bottomIndicator = $('.scroll_indicator.bottom', that.element),
-          topIndicator = $('.scroll_indicator.top', that.element),
-          scrollUpIntervalID, scrollDownIntervalID,
-          hideOverlay = function () {
-            overlays.addClass('hidden').removeClass('visible');
-          };
-
-        var atBoundary = function (direction) {
-          if (direction === 'up') {
-            return (scroller.y >= 0);
-          }
-          else {
-            return (scroller.y <= scroller.maxScrollY);
-          }
-        };
-
-        toggleIndicators = function () {
-          if (atBoundary('down')) {
-            clearInterval(scrollDownIntervalID);
-            bottomIndicator.hide().removeClass('pressed');
-          }
-          if (atBoundary('up')) {
-            clearInterval(scrollUpIntervalID);
-            topIndicator.hide().removeClass('pressed');
-          }
-          if (!atBoundary('up') && !atBoundary('down')) {
-            topIndicator.show();
-            bottomIndicator.show();
-          }
-        };
-
-        var keyPressHandler = function(e) {
-          var that = this,
-            scrollByStep = function() {
-              if ($(that).hasClass('bottom')) {
-                scroller.scrollBy(0, -20, 80);
-              } else {
-                scroller.scrollBy(0, 20, 80);
-              }
-              toggleIndicators();
-            };
-
-          if (e.which == 13) {
-            scrollByStep();
-
-            setTimeout(function() {
-              that.focus();
-            }, 50);
-          }
-          else if (e.which === 0) {
-            scrollByStep();
-          }
-        };
-
         var scrollerOptions = {
           mouseWheel: true,
           bounce    : false,
@@ -237,51 +239,9 @@
 
         var scroller = new IScroll(this, scrollerOptions);
 
-        $('ul.navigation_thumbnails', that.element).pageNavigationList({
+        $('ul.navigation_dots', that.element).pageNavigationList({
           scroller: scroller,
           scrollToActive: true
-        });
-
-        pageflow.ready.then(function() {
-          toggleIndicators();
-        });
-
-        topIndicator.on({
-          'mousedown': function () {
-            scrollUpIntervalID = setInterval(function () {
-              scroller.scrollBy(0, 1);
-              toggleIndicators();
-            }, 5);
-          },
-          'keypress': keyPressHandler,
-          'touchstart': keyPressHandler
-        });
-
-        topIndicator.on('mouseup touchend', function() {
-          clearInterval(scrollUpIntervalID);
-        });
-
-        bottomIndicator.on({
-          'mousedown': function() {
-            scrollDownIntervalID = setInterval(function() {
-              scroller.scrollBy(0, -1);
-              toggleIndicators();
-            }, 5);
-          },
-          'keypress': keyPressHandler,
-          'touchstart': keyPressHandler
-        });
-
-        bottomIndicator.on('mouseup touchend', function () {
-          clearInterval(scrollDownIntervalID);
-        });
-
-        toggleIndicators();
-
-        scroller.on('scroll', function () {
-          toggleIndicators();
-          hideOverlay();
-          removeHandler();
         });
 
       });
@@ -317,10 +277,10 @@
 
       $('.button, .navigation_mute, .scroll_indicator', this.element).on({
         'touchstart mousedown': function() {
-          $(this).addClass('pressed');
+          $(this).parent().addClass('pressed');
         },
         'touchend mouseup': function() {
-          $(this).removeClass('pressed');
+          $(this).parent().removeClass('pressed');
         }
       });
 
@@ -346,9 +306,6 @@
       $('body').on({
         'mouseup': function() {
           handlingVolume = false;
-        },
-        'pageactivate': function(e) {
-          toggleIndicators();
         }
       });
     }

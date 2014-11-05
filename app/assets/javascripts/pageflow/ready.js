@@ -18,7 +18,7 @@ pageflow.ready = new $.Deferred(function(readyDeferred) {
       $('.header').header({
         slideshow: pageflow.slides
       });
-      $('.navigation').navigation();
+      $('.progress_navigation_bar').navigation();
       $('.navigation_mobile').navigationMobile();
       $('.overview').overview();
       $('.multimedia_alert').multimediaAlert();

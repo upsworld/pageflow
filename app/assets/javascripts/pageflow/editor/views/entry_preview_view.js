@@ -5,7 +5,7 @@ pageflow.EntryPreviewView = Backbone.Marionette.ItemView.extend({
   ui: {
     header: '.header',
     entry: '.entry',
-    navigation: '.navigation',
+    navigation: '.progress_navigation_bar',
     navigationMobile: '.navigation_mobile',
     overview: '.overview'
   },
@@ -62,7 +62,7 @@ pageflow.EntryPreviewView = Backbone.Marionette.ItemView.extend({
       var partials = $('<div />').html(response);
 
       view.ui.header.replaceWith(partials.find('.header'));
-      view.ui.navigation.replaceWith(partials.find('.navigation'));
+      view.ui.navigation.replaceWith(partials.find('.progress_navigation_bar'));
       view.ui.navigationMobile.replaceWith(partials.find('.navigation_mobile'));
       view.ui.overview.replaceWith(partials.find('.overview'));
 

@@ -30,7 +30,6 @@
         links.each(function() {
           var link = $(this);
           var active = '#' + id === link.attr('href');
-
           link.toggleClass('active', active);
           link.attr('tabindex', active ? '-1' : '3');
 

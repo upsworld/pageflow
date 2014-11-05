@@ -1,13 +1,15 @@
-<%= content_tag :div, class: ["navigation", entry.home_button.enabled? ? 'with_home_button' : nil].compact.join(' ') do %>
-  <%= render 'pageflow/entries/navigation/bar_top', :entry => entry %>
+<%= content_tag :div, class: ["progress_navigation_bar", entry.home_button.enabled? ? 'with_home_button' : nil].compact.join(' ') do %>
+  <div class="navigation_button_area">
+    <%= render 'pageflow/entries/navigation/bar_top', :entry => entry %>
+    <%= render 'pageflow/entries/navigation/bar_bottom', :entry => entry %>
+  </div>
   <div class="scroller">
-    <ul class="navigation_thumbnails">
+    <ul class="navigation_dots">
       <%= render :partial => 'pageflow/entries/navigation/page',
                  :collection => entry.pages.displayed_in_navigation,
                  :locals => {:image_style => :navigation_thumbnail_small, :image_width => 85} %>
     </ul>
   </div>
-  <%= render 'pageflow/entries/navigation/bar_bottom', :entry => entry %>
 </div>
 <div class="navigation_mobile">
   <div class="menu index"></div>

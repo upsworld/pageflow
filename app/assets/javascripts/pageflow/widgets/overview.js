@@ -23,7 +23,7 @@ jQuery(function($) {
           .toggleClass('active', state)
           .updateTitle();
 
-        $('section.page').toggleClass('hiddenByOverlay', state);
+        $('section.page').toggleClass('hidden_by_overlay', state);
         scrollIndicator.toggleClass('hidden', state);
       };
 

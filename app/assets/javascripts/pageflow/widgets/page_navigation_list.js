@@ -15,7 +15,7 @@
       });
 
       function getPageId(section) {
-        return $(section).attr('id') || ($(section).data('permaId') || '').toString();
+        return $(section).attr('id') || ($(section).attr('data-perma-id') || '').toString();
       }
 
       function highlightActivePage(id) {
@@ -36,7 +36,7 @@
 
           if (active) {
             if (link.data('chapterId')) {
-              highlightChapter(link.data('chapterId'))
+              highlightChapter(link.data('chapterId'));
             }
 
             if (options.scrollToActive) {

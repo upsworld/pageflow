@@ -117,7 +117,7 @@ pageflow.EntryPreviewView = Backbone.Marionette.ItemView.extend({
 
   widgetNames: function(widgets) {
     return widgets.map(function() {
-      return $(this).data('widget') + '_present';
+      return 'widget_' + $(this).data('widget') + '_present';
     }).get();
   }
 });

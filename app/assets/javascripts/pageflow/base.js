@@ -34,6 +34,8 @@
 //= require ./preload
 //= require ./bandwidth
 //= require ./browser
+//= require ./features
+//= require ./audio
 //= require ./audio_player
 //= require ./video_player
 //= require ./visited

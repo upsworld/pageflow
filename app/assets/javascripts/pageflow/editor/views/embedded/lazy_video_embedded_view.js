@@ -22,6 +22,8 @@ pageflow.LazyVideoEmbeddedView = Backbone.Marionette.View.extend({
     if (!this.srcDefined || this.model.hasChanged(this.options.propertyName)) {
       var src = this.model.getVideoFileSources(this.options.propertyName);
       videoPlayer.src(src);
+
+      this.srcDefined = true;
     }
 
     if (this.options.dataSizeAttributes) {

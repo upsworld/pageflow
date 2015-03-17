@@ -26,13 +26,17 @@
 //= require backbone-rails
 //= require_self
 
+//= require ./object
 //= require ./cookies
 //= require ./events
 //= require ./page_type
+//= require ./page_transitions
 //= require ./asset_urls
 //= require ./preload
 //= require ./bandwidth
+//= require ./browser
 //= require ./features
+//= require ./audio
 //= require ./audio_player
 //= require ./video_player
 //= require ./visited

@@ -259,10 +259,14 @@
       var delta = options.delta || 0;
 
       if (direction === 'up') {
-        return (this.iscroll.y >= -delta);
+        return (this.iscroll.maxScrollY === 0 ?
+                this.iscroll.x >= -delta :
+                this.iscroll.y >= -delta);
       }
       else {
-        return (this.iscroll.y <= this.iscroll.maxScrollY + delta);
+        return (this.iscroll.maxScrollY === 0 ?
+                this.iscroll.x <= this.iscroll.maxScrollX + delta :
+                this.iscroll.y <= this.iscroll.maxScrollY + delta);
       }
     }
   });

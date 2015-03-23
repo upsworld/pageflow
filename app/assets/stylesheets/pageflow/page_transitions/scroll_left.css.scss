@@ -16,10 +16,12 @@ section.scroll_left {
     background-color: white;
   }
   .content_and_background {
-    @include transition(1s ease);
+    @include transition(transform 0.9s linear 0.1s);
+    -webkit-backface-visibility: hidden;
   }
   &.active div.content_and_background {
     @include transform(translate3d(0,0,0));
+    @include transition(transform 0.9s linear);
   }
 
   &.active .blackLayer {
@@ -62,5 +64,9 @@ section.scroll_left {
     .blackLayer {
       opacity: 0;
     }
+  }
+
+  &.active {
+    z-index: 79;
   }
 }

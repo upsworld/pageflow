@@ -9,7 +9,6 @@
   .blackLayer,
   .backgroundArea {
     -webkit-backface-visibility: hidden;
-    @include transition (opacity 1s linear);
     position: relative;
   }
 

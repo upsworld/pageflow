@@ -1,3 +1,4 @@
+//=require ./slideshow/atmo
 //=require ./slideshow/page_widget
 //=require ./slideshow/scroller_widget
 //=require ./slideshow/scroll_indicator_widget
@@ -6,11 +7,13 @@
 //=require ./slideshow/swipe_gesture
 //=require ./slideshow/hide_text
 //=require ./slideshow/hide_text_on_swipe
+//=require ./slideshow/dom_order_scroll_navigator
 
 pageflow.Slideshow = function($el, configurations) {
   var transitioning = false,
       preload = new pageflow.ProgressivePreload(),
       currentPage = $(),
+      that = this,
       currentPageIndex, pages;
 
   configurations = configurations || {};
@@ -41,20 +44,20 @@ pageflow.Slideshow = function($el, configurations) {
   };
 
   this.back = function() {
-    this.goTo(currentPage.prev('.page'), {position: 'bottom'});
+    this.scrollNavigator.back(currentPage);
   };
 
   this.next = function() {
-    this.goTo(currentPage.next('.page'));
+    this.scrollNavigator.next(currentPage);
   };
 
-  this.goToById = function(id) {
-    this.goTo($el.find('[data-id=' + id + ']'));
+  this.goToById = function(id, options) {
+    return this.goTo($el.find('[data-id=' + id + ']'), options);
   };
 
-  this.goToByPermaId = function(permaId) {
+  this.goToByPermaId = function(permaId, options) {
     if (permaId) {
-      this.goTo($el.find('#' + permaId));
+      return this.goTo($el.find('#' + permaId), options);
     }
   };
 
@@ -67,7 +70,7 @@ pageflow.Slideshow = function($el, configurations) {
         currentPage = page;
         currentPageIndex = currentPage.index();
 
-        var direction = currentPageIndex > previousPage.index() ? 'forwards' : 'backwards';
+        var direction = this.scrollNavigator.getTransitionDirection(previousPage, currentPage, options);
 
         var outDuration = previousPage.page('deactivate', {
           direction: direction,
@@ -85,11 +88,13 @@ pageflow.Slideshow = function($el, configurations) {
 
         return Math.max(outDuration, inDuration);
       }, this);
+
+      return true;
     }
   };
 
   this.goToFirstPage = function() {
-    this.goTo(pages.first());
+    return this.goTo(pages.first());
   };
 
   this.update = function() {
@@ -111,6 +116,10 @@ pageflow.Slideshow = function($el, configurations) {
     return currentPage;
   };
 
+  this.currentPageConfiguration = function() {
+    return currentPage.page('getConfiguration');
+  };
+
   function ensureCurrentPage() {
     var newCurrentPage = findNewCurrentPage();
 
@@ -125,7 +134,7 @@ pageflow.Slideshow = function($el, configurations) {
 
   function findNewCurrentPage() {
     if (!currentPage.length) {
-      return pages.first();
+      return that.scrollNavigator.getLandingPage(pages);
     }
     else if (!currentPage.parent().length) {
       return nearestPage(currentPageIndex);
@@ -169,6 +178,8 @@ pageflow.Slideshow = function($el, configurations) {
   scrollIndicator.on('click', _.bind(function(event) {
     this.next();
   }, this));
+
+  this.scrollNavigator = new pageflow.DomOrderScrollNavigator(this);
 };
 
 pageflow.Slideshow.setup = function(options) {
@@ -184,17 +195,24 @@ pageflow.Slideshow.setup = function(options) {
     configurationsById(options.pages)
   );
 
+  pageflow.features.enable('slideshow', options.enabledFeatureNames || []);
+
+  pageflow.atmo = pageflow.Atmo.create(
+    pageflow.slides,
+    pageflow.events,
+    pageflow.audio
+  );
+
   if (options.beforeFirstUpdate) {
     options.beforeFirstUpdate();
   }
 
   pageflow.slides.update();
 
-  if (options.history !== false) {
-    pageflow.history = new pageflow.History(
-      pageflow.slides
-    );
-  }
+  pageflow.history = pageflow.History.create(
+    pageflow.slides,
+    {simulate: options.simulateHistory}
+  );
 
   return pageflow.slides;
 };

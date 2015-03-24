@@ -8,14 +8,19 @@
       this.reinit();
     },
 
+    getConfiguration: function() {
+      return this.configuration;
+    },
+
     reinit: function() {
       this.pageType = pageflow.pageType.get(this.element.data('template'));
       this.element.data('pageType', this.pageType);
 
       this.content = this.element.find('.scroller');
-      this.content.scroller();
+      this.content.scroller(this.pageType.scrollerOptions || {});
       this.content.hideTextOnSwipe();
 
+      this.pageType.scroller = this.content.scroller('instance');
       this._triggerPageTypeHook('enhance');
     },
 

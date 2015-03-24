@@ -35,6 +35,7 @@ module Pageflow
       protected
 
       def data_attributes
+        options.slice(:style_group)
       end
 
       def image_id
@@ -48,7 +49,11 @@ module Pageflow
       private
 
       def css_class
-        ["background background_image image_#{image_id || 'none'}", options[:class]].compact.join(' ')
+        ["background background_image #{image_css_class}", options[:class]].compact.join(' ')
+      end
+
+      def image_css_class
+        ['image', options[:style_group], image_id || 'none'].compact.join('_')
       end
 
       def background_position(coord)
@@ -60,7 +65,9 @@ module Pageflow
     class DivWithSizeAttributes < Div
       def data_attributes
         if image_file
-          {:width => image_file.width, :height => image_file.height}
+          super.merge(:width => image_file.width, :height => image_file.height)
+        else
+          super
         end
       end
 

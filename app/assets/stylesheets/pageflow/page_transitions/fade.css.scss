@@ -19,7 +19,7 @@ section.fade {
     background-color: white;
   }
 
-  &.active.animate-in-forwards .backgroundArea {
+  &.active .backgroundArea {
     opacity: 1;
   }
 

@@ -20,8 +20,8 @@ section.scroll_left {
     -webkit-backface-visibility: hidden;
   }
   &.active div.content_and_background {
-    @include transform(translate3d(0,0,0));
     @include transition(transform 0.9s linear);
+    @include transform(translate3d(0,0,0));
   }
 
   &.active .blackLayer {

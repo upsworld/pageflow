@@ -19,10 +19,6 @@ section.fade {
     background-color: white;
   }
 
-  &.active .backgroundArea {
-    opacity: 1;
-  }
-
   &.animate-in-forwards .backgroundArea {
     opacity: 0;
   }
@@ -33,6 +29,10 @@ section.fade {
     opacity: 0;
   }
   &.animate-out-backwards .backgroundArea{
+    opacity: 1;
+  }
+
+  &.active .backgroundArea {
     opacity: 1;
   }
 

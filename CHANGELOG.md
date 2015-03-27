@@ -2,6 +2,8 @@
 
 ### Changes on `master`
 
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.7.2...master)
+
 ##### Deprecations
 
 - The configuration API for registering new page types has
@@ -16,9 +18,35 @@
   The old method still exists for now, but will be removed before
   version 1.0.
 
+##### Rails Engine
+
+- Allow exluding widgets from being rendered in the preview.
+  ([#271](https://github.com/codevise/pageflow/pull/271))
+- Authorize display of entry admin tabs.
+  ([#272](https://github.com/codevise/pageflow/pull/272))
+- Trigger `pageflow.events` Event when the multimedia alert is closed.
+  ([#260](https://github.com/codevise/pageflow/pull/260))
+- Pass page widget in context option of media events.
+  ([#273](https://github.com/codevise/pageflow/pull/273))
+
+##### Internals
+
+- Include teaspoon javascript tests in travis run.
+  ([#264](https://github.com/codevise/pageflow/pull/264))
+- Use container based travis infrastructure and cache gem bundle
+  between test runs.
+  ([#270](https://github.com/codevise/pageflow/pull/270))
+- Bug fix: Reset capybara session before cleaning the database in
+  tests.
+  ([#269](https://github.com/codevise/pageflow/pull/269))
+- Bug fix: Prevent order dependent test suite failures.
+  ([#274](https://github.com/codevise/pageflow/pull/274))
+
 ### Version 0.7.2
 
 2015-02-25
+
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.7.1...v0.7.2)
 
 - Bug fix: Depend on version 1.x of `aws-sdk` gem.
   ([#259](https://github.com/codevise/pageflow/pull/259))
@@ -26,6 +54,8 @@
 ### Version 0.7.1
 
 2015-02-19
+
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.7.0...v0.7.1)
 
 - Bug fix: Make gem versions more specific.
   ([#254](https://github.com/codevise/pageflow/pull/254),
@@ -39,6 +69,8 @@
 ### Version 0.7.0
 
 2015-02-03
+
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.6.0...v0.7.0)
 
 ##### Manual Update Step
 
@@ -136,6 +168,8 @@
 ### Version 0.6.0
 
 2014-12-15
+
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.5.0...v0.6.0)
 
 ##### Public Site
 
@@ -239,6 +273,8 @@
 
 2014-10-14
 
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.4.0...v0.5.0)
+
 ##### Manual Update Step
 
 To enable the new built in audio loop page type, you need to add the
@@ -302,6 +338,8 @@ following line to your `config/initializers/pageflow.rb` file:
 
 2014-09-08
 
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.3.0...v0.4.0)
+
 ##### Breaking Changes
 
 - The `<meta name="description" />` tag now uses the `Entry#summary`
@@ -351,6 +389,8 @@ following line to your `config/initializers/pageflow.rb` file:
 ### Version 0.3.0
 
 2014-08-22
+
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.2.1...v0.3.0)
 
 ##### Breaking Changes
 
@@ -423,11 +463,15 @@ following line to your `config/initializers/pageflow.rb` file:
 
 2014-07-25
 
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.2.0...v0.2.1)
+
 - Update Zencoder gem to fix [Zencoder SSL issue](http://status.zencoder.com/events/84) ([#70](https://github.com/codevise/pageflow/pull/70)).
 
 ### Version 0.2.0
 
 2014-07-18
+
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.1.0...v0.2.0)
 
 ##### Breaking Changes
 
@@ -496,6 +540,8 @@ following line to your `config/initializers/pageflow.rb` file:
 ### Version 0.1.0
 
 2014-05-16
+
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.0.1...v0.1.0)
 
 - `pageflow:install` generator now creates resque rake tasks.
 - Configuration option to change email address user invitations are sent from.

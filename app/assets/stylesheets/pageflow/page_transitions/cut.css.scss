@@ -17,4 +17,7 @@ section.cut {
   &.animate-out-backwards {
     display: none;
   }
+  &.animate-in-backwards, &.animate-in-forwards {
+    z-index: 2;
+  }
 }

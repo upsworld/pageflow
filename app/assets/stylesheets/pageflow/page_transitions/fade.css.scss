@@ -1,5 +1,9 @@
 /* fading background, vertical scrolling content */
 
+section.page {
+  background-color: transparent;
+}
+
 section.fade {
 
   .blackLayer {
@@ -8,14 +12,11 @@ section.fade {
   .backgroundArea {
     background-color: black;
     -webkit-backface-visibility: hidden;
+    @include transition (opacity 1s ease);
   }
 
   &.invert .backgroundArea {
     background-color: white;
-  }
-
-  &.active.animate-in-forwards .backgroundArea {
-    opacity: 1;
   }
 
   &.animate-in-forwards .backgroundArea {
@@ -25,10 +26,14 @@ section.fade {
     opacity: 1;
   }
   &.animate-in-backwards .backgroundArea{
-    opacity: 1;
+    opacity: 0;
   }
   &.animate-out-backwards .backgroundArea{
-    opacity: 0;
+    opacity: 1;
+  }
+
+  &.active .backgroundArea {
+    opacity: 1;
   }
 
   .content {
@@ -41,6 +46,8 @@ section.fade {
   }
 
   &.animate-in-forwards {
+    z-index: 79;
+
     .content {
       @include transform(translate3d(0,100%,0));
     }
@@ -51,6 +58,8 @@ section.fade {
     }
   }
   &.animate-in-backwards {
+    z-index: 79;
+
     .content {
       @include transform(translate3d(0,-100%,0));
     }

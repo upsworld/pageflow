@@ -9,7 +9,6 @@
   .blackLayer,
   .backgroundArea {
     -webkit-backface-visibility: hidden;
-    @include transition (opacity 1s linear);
     position: relative;
   }
 
@@ -96,21 +95,6 @@
     @each $direction in forwards backwards {
       .animate-#{$io}-#{$direction} {
         display: block;
-
-        .content,
-        .content_and_background {
-          @include animation-duration(1s);
-          @include animation-timing-function(ease);
-          @include animation-iteration-count(1);
-        }
-
-        &.fade .content {
-        /*  @include animation-name(scroll-#{$io}-#{$direction}); */
-        }
-
-        &.scroll .content_and_background {
-          /* @include animation-name(scroll-#{$io}-#{$direction}); */
-        }
       }
     }
   }

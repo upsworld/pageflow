@@ -2,7 +2,7 @@ pageflow.pageType.register('video', _.extend({
 
   enhance: function(pageElement, configuration) {
     pageElement.find('.contentText').before(pageElement.find('.page_header'));
-    this._initVideoPlayer(pageElement);
+    this._initVideoPlayer(pageElement, configuration);
   },
 
   preload: function(pageElement, configuration) {
@@ -113,7 +113,7 @@ pageflow.pageType.register('video', _.extend({
     this.updateVideoPoster(pageElement, configuration.getVideoPosterUrl());
   },
 
-  _initVideoPlayer: function(pageElement) {
+  _initVideoPlayer: function(pageElement, configuration) {
     var videoPlayer = new pageflow.VideoPlayer.Lazy(pageElement.find('[data-template=video]'), {
       bufferUnderrunWaiting: true,
       controls: true,
@@ -205,6 +205,10 @@ pageflow.pageType.register('video', _.extend({
 
         if (pageflow.browser.has('mobile platform')) {
           this.showPosterImage();
+        }
+
+        if (configuration.auto_change_page_on_ended) {
+          pageflow.slides.next();
         }
       });
 

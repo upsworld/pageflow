@@ -21,7 +21,7 @@ pageflow.PageLinksView = Backbone.Marionette.ItemView.extend({
 
   onRender: function() {
     var pageLinks = this.model.pageLinks();
-    var collectionViewConstructor = pageLinks.updateOrder ? pageflow.SortableCollectionView : pageflow.CollectionView;
+    var collectionViewConstructor = pageLinks.saveOrder ? pageflow.SortableCollectionView : pageflow.CollectionView;
 
     this.subview(new collectionViewConstructor({
       el: this.ui.links,

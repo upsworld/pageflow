@@ -8,4 +8,10 @@ pageflow.ConfigurationEditorTabView.groups.define('options', function() {
       collection: pageflow.audioFiles
     });
   }
+
+  if (pageflow.features.isEnabled('scroll_indicator_modes')) {
+    this.input('scroll_indicator_mode', pageflow.SelectInputView, {
+      values: pageflow.Page.scrollIndicatorModes
+    });
+  }
 });

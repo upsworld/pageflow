@@ -8,19 +8,11 @@ div.page_links {
     margin-bottom: 10px;
   }
 
-  a.remove {
-    @include icon-only-button(#aaa);
-    @include trash-icon;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-  }
-
   a.edit {
     @include icon-only-button(#aaa);
     @include pencil-icon;
     position: absolute;
-    right: 40px;
+    right: 4px;
     top: 4px;
   }
 

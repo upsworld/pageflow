@@ -7,7 +7,6 @@ de:
           add: "Hinzufügen"
         page_link_item:
           edit: "Bearbeiten"
-          remove: "Löschen"
       views:
         page_link_item_view:
           unnamed: "(Unbenannt)"

@@ -12,11 +12,6 @@ pageflow.PageLinkItemView = Backbone.Marionette.ItemView.extend({
   },
 
   events: {
-    'click .remove': function() {
-      this.options.pageLinks.removeLink(this.model);
-      return false;
-    },
-
     'click .edit': function() {
       pageflow.editor.navigate(this.model.editPath(), {trigger: true});
       return false;

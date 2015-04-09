@@ -19,7 +19,7 @@ pageflow.pageType.register('audio', _.extend({
     $(firstContentElement[0]).attr('id','firstContent');
     //
 
-    this._ensureAudioPlayer(pageElement);
+    this._ensureAudioPlayer(pageElement, configuration);
 
     var that = this;
 
@@ -96,7 +96,7 @@ pageflow.pageType.register('audio', _.extend({
       opacity: configuration.get('gradient_opacity') / 100
     });
 
-    this._ensureAudioPlayer(pageElement);
+    this._ensureAudioPlayer(pageElement, configuration.attributes);
     this.audioPlayer.src(configuration.getAudioFileSources('audio_file_id'));
   },
 
@@ -110,10 +110,11 @@ pageflow.pageType.register('audio', _.extend({
     };
   },
 
-  _ensureAudioPlayer: function(pageElement) {
+  _ensureAudioPlayer: function(pageElement, configuration) {
     this.audioPlayer = this.audioPlayer ||
       pageflow.AudioPlayer.fromScriptTag(pageElement.find('script[data-audio]'), {
         mediaEvents: true,
+        hooks: pageflow.atmo.createMediaPlayerHooks(configuration),
         context: {
           page: pageElement.page('instance')
         }

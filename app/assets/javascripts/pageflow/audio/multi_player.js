@@ -11,6 +11,14 @@ pageflow.Audio.MultiPlayer = function(pool, options) {
     return current.pause();
   };
 
+  this.position = function() {
+    return current.position;
+  };
+
+  this.duration = function() {
+    return current.duration;
+  };
+
   this.fadeTo = function(id) {
     return changeCurrent(id, function(player) {
       player.playAndFadeIn(options.fadeDuration);
@@ -21,6 +29,10 @@ pageflow.Audio.MultiPlayer = function(pool, options) {
     return changeCurrent(id, function(player) {
       player.play();
     });
+  };
+
+  this.formatTime = function(time) {
+    return current.formatTime(time);
   };
 
   function changeCurrent(id, callback) {
@@ -47,6 +59,14 @@ pageflow.Audio.MultiPlayer = function(pool, options) {
   function startEventPropagation(player, id) {
     that.listenTo(player, 'play', function() {
       that.trigger('play', {audioFileId: id});
+    });
+
+    that.listenTo(player, 'pause', function() {
+      that.trigger('pause', {audioFileId: id});
+    });
+
+    that.listenTo(player, 'timeupdate', function() {
+      that.trigger('timeupdate', {audioFileId: id});
     });
 
     that.listenTo(player, 'ended', function() {

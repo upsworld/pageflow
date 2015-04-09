@@ -23,6 +23,22 @@
       var configuration = this.slideshow.currentPageConfiguration();
 
       this.multiPlayer.fadeTo(configuration[attributeName]);
+    },
+
+    createMediaPlayerHooks: function(configuration) {
+      var atmo = this;
+
+      if (configuration.pause_atmo) {
+        return {
+          before: function() {
+            return atmo.pause();
+          },
+
+          after: function() {
+            return atmo.resume();
+          }
+        };
+      }
     }
   });
 

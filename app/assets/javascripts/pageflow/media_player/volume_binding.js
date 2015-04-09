@@ -6,16 +6,20 @@ pageflow.mediaPlayer.volumeBinding = function(player, settings) {
     player.volume(settings.get('volume'));
     listenToVolumeSetting();
 
-    originalPlay.call(player);
+    return originalPlay.call(player);
   };
 
   player.playAndFadeIn = function(duration) {
+    if (player.playing) {
+      return new jQuery.Deferred().resolve().promise();
+    }
+
     player.volume(0);
-    listenToVolumeSetting();
 
-    originalPlay.call(player);
-
-    return player.fadeVolume(settings.get('volume'), duration);
+    return $.when(originalPlay.call(player)).then(function() {
+      listenToVolumeSetting();
+      return player.fadeVolume(settings.get('volume'), duration);
+    });
   };
 
   player.pause = function() {
@@ -24,6 +28,10 @@ pageflow.mediaPlayer.volumeBinding = function(player, settings) {
   };
 
   player.fadeOutAndPause = function(duration) {
+    if (!player.playing) {
+      return new jQuery.Deferred().resolve().promise();
+    }
+
     stopListeningToVolumeSetting();
 
     return player.fadeVolume(0, duration).then(function() {

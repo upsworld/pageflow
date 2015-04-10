@@ -1,0 +1,16 @@
+de:
+  pageflow:
+    delayed_text_fade_in:
+      feature_name: "Titel verzögert einblenden"
+
+  activerecord:
+    attributes:
+      pageflow/page:
+        delayed_text_fade_in: "Text verzögert einblenden"
+    values:
+      pageflow/page:
+        delayed_text_fade_in:
+          no_fade: Nicht verzögert einblenden
+          short: Kurze Verzögerung
+          medium: Mittlere Verzögerung
+          long: Lange Verzögerung

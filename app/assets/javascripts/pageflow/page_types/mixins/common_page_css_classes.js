@@ -8,6 +8,11 @@ pageflow.commonPageCssClasses = {
     });
     pageElement.addClass('text_position_' + configuration.get('text_position'));
 
+    _.each(pageflow.Page.delayedTextFadeIn, function(fade) {
+      pageElement.removeClass('delayed_text_fade_in_' + fade);
+    });
+    pageElement.addClass('delayed_text_fade_in_' + configuration.get('delayed_text_fade_in'));
+
     _.each(pageflow.Page.scrollIndicatorModes, function(mode) {
       pageElement.removeClass('scroll_indicators_' + mode);
     });

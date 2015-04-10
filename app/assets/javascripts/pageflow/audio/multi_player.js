@@ -19,6 +19,10 @@ pageflow.Audio.MultiPlayer = function(pool, options) {
     return current.duration;
   };
 
+  this.seek = function(position) {
+    current.seek(position);
+  };
+
   this.fadeTo = function(id) {
     return changeCurrent(id, function(player) {
       player.playAndFadeIn(options.fadeDuration);

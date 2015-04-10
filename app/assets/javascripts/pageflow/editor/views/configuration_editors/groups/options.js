@@ -1,6 +1,7 @@
 pageflow.ConfigurationEditorTabView.groups.define('options', function() {
   this.input('display_in_navigation', pageflow.CheckBoxInputView);
   this.group('page_transitions');
+  this.input('delayed_text_fade_in', pageflow.SelectInputView, {values: pageflow.Page.delayedTextFadeIn});
   this.input('description', pageflow.TextAreaInputView, {size: 'short'});
 
   if (pageflow.features.isEnabled('atmo')) {

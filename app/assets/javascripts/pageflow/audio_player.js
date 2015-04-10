@@ -36,7 +36,9 @@ pageflow.AudioPlayer = function(sources, options) {
     pageflow.AudioPlayer.mediaEvents(audio, options.context);
   }
 
-  pageflow.mediaPlayer.enhance(audio, options);
+  pageflow.mediaPlayer.enhance(audio, _.extend({
+    loadWaiting: true
+  }, options || {}));
 
   audio.src = function(sources) {
     ready.then(function() {
@@ -75,6 +77,10 @@ pageflow.AudioPlayer = function(sources, options) {
     if (this.currentSrc) {
       originalPlay.apply(this, arguments);
     }
+  };
+
+  audio.paused = function() {
+    return !audio.playing;
   };
 
   audio.src(sources);

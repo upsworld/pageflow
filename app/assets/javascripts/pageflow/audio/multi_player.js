@@ -7,20 +7,52 @@ pageflow.Audio.MultiPlayer = function(pool, options) {
     return current.play();
   };
 
+  this.resumeAndFadeIn = function() {
+    return current.playAndFadeIn(options.fadeDuration);
+  };
+
+  this.seek = function(position) {
+    return current.seek(position);
+  };
+
   this.pause = function() {
     return current.pause();
   };
 
+  this.paused = function() {
+    return current.paused();
+  };
+
+  this.fadeOutAndPause = function() {
+    return current.fadeOutAndPause(options.fadeDuration);
+  };
+
+  this.position = function() {
+    return current.position;
+  };
+
+  this.duration = function() {
+    return current.duration;
+  };
+
   this.fadeTo = function(id) {
     return changeCurrent(id, function(player) {
-      player.playAndFadeIn(options.fadeDuration);
+      return player.playAndFadeIn(options.fadeDuration);
     });
   };
 
   this.play = function(id) {
     return changeCurrent(id, function(player) {
-      player.play();
+      return player.play();
     });
+  };
+
+  this.changeVolumeFactor = function(factor) {
+    return current.changeVolumeFactor(factor, options.fadeDuration);
+  };
+
+  this.formatTime = function(time) {
+    return current.formatTime(time);
   };
 
   function changeCurrent(id, callback) {
@@ -31,13 +63,15 @@ pageflow.Audio.MultiPlayer = function(pool, options) {
     var player = pool.get(id);
     currentId = id;
 
-    if (options.playFromBeginning) {
-      player.seek(0);
-    }
-
     current.fadeOutAndPause(options.fadeDuration).then(function() {
       startEventPropagation(player, id);
       callback(player);
+
+      if (options.playFromBeginning) {
+        player.one('timeupdate', function() {
+          player.seek(0);
+        });
+      }
     });
 
     stopEventPropagation(current);
@@ -47,6 +81,14 @@ pageflow.Audio.MultiPlayer = function(pool, options) {
   function startEventPropagation(player, id) {
     that.listenTo(player, 'play', function() {
       that.trigger('play', {audioFileId: id});
+    });
+
+    that.listenTo(player, 'pause', function() {
+      that.trigger('pause', {audioFileId: id});
+    });
+
+    that.listenTo(player, 'timeupdate', function() {
+      that.trigger('timeupdate', {audioFileId: id});
     });
 
     that.listenTo(player, 'ended', function() {

@@ -12,16 +12,24 @@
     },
 
     pause: function() {
-      this.multiPlayer.pause();
+      return this.multiPlayer.fadeOutAndPause();
+    },
+
+    turnDown: function() {
+      return this.multiPlayer.changeVolumeFactor(0.2);
     },
 
     resume: function() {
-      this.multiPlayer.resume();
+      if (this.multiPlayer.paused()) {
+        return this.multiPlayer.resumeAndFadeIn();
+      }
+      else {
+        return this.multiPlayer.changeVolumeFactor(1);
+      }
     },
 
     update: function() {
       var configuration = this.slideshow.currentPageConfiguration();
-
       this.multiPlayer.fadeTo(configuration[attributeName]);
     }
   });
@@ -37,4 +45,23 @@
       })
     );
   };
+
+  pageflow.Atmo.createMediaPlayerHooks = function(configuration) {
+    return {
+      before: function() {
+        if (configuration.atmo_during_playback === 'mute') {
+          return pageflow.atmo.pause();
+        }
+        else if (configuration.atmo_during_playback === 'turn_down') {
+          return pageflow.atmo.turnDown();
+        }
+      },
+
+      after: function() {
+        return pageflow.atmo.resume();
+      }
+    };
+  };
+
+  pageflow.Atmo.duringPlaybackModes = ['play', 'mute', 'turn_down'];
 }());

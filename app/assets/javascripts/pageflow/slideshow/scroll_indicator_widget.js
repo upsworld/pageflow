@@ -28,6 +28,11 @@
 
         that.element.toggleClass('invert', invertIndicator);
         that.element.toggleClass('horizontal', !!page.data('scrollDirection'));
+        that.element.toggleClass('available', targetPageExists());
+      }
+
+      function targetPageExists() {
+        return direction === 'down' ? parent.nextPageExists() : parent.previousPageExists();
       }
 
       parent.on('pageactivate', function(event) {
@@ -49,7 +54,7 @@
         var page = $(event.target).parents('section');
 
         if (page.hasClass('active')) {
-          that.element.toggleClass('visible', parent.nextPageExists());
+          that.element.toggleClass('visible', targetPageExists());
         }
       });
 

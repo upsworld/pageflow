@@ -1,5 +1,6 @@
 (function($) {
-  $.widget('pageflow.page', {
+  $.widget('pageflow.nonLazyPage', {
+    widgetEventPrefix: 'page',
     _create: function() {
       this.configuration = this.element.data('configuration') || this.options.configuration;
       this.index = this.options.index;
@@ -10,6 +11,11 @@
 
     getConfiguration: function() {
       return this.configuration;
+    },
+
+    update: function(configuration) {
+      _.extend(this.configuration, configuration.attributes);
+      this.pageType.update(this.element, configuration);
     },
 
     reinit: function() {

@@ -21,7 +21,9 @@
       this.content.hideTextOnSwipe();
 
       this.pageType.scroller = this.content.scroller('instance');
+
       this._triggerPageTypeHook('enhance');
+      this._trigger('enhanced');
     },
 
     reactivate: function() {

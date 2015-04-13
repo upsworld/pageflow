@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    attributes:
+      "pageflow/chapter":
+        parent_page_perma_id: "Parent Page"
+de:
+  activerecord:
+    attributes:
+      "pageflow/chapter":
+        parent_page_perma_id: "Übergeordnete Seite"

@@ -47,15 +47,20 @@ describe('pageflow.Slideshow.Atmo', function() {
   });
 
   describe('#resume', function() {
-    it('calls resumeAndFadeIn on multiPlayer', function() {
-      var slideshow = {};
-      var events = support.fakeEventEmitter();
-      var multiPlayer = {resumeAndFadeIn: sinon.spy()};
-      var atmo = new pageflow.Atmo(slideshow, events, multiPlayer);
+    describe('when multiPlayer is paused', function() {
+      it('calls resumeAndFadeIn on multiPlayer', function() {
+        var slideshow = {};
+        var events = support.fakeEventEmitter();
+        var multiPlayer = {
+          paused: sinon.stub().returns(true),
+          resumeAndFadeIn: sinon.spy()
+        };
+        var atmo = new pageflow.Atmo(slideshow, events, multiPlayer);
 
-      atmo.resume();
+        atmo.resume();
 
-      expect(multiPlayer.resumeAndFadeIn).to.have.been.called;
+        expect(multiPlayer.resumeAndFadeIn).to.have.been.called;
+      });
     });
   });
 });

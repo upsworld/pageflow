@@ -31,7 +31,7 @@ pageflow.ChapterFilter = pageflow.Object.extend({
 
   chapterVisibleFromPage: function(currentPagePermaId, chapterId) {
     var currentChapterId = this.entry.getChapterIdByPagePermaId(currentPagePermaId);
-    return this.chapterVisibleFromPage(currentChapterId, chapterId);
+    return this.chapterVisibleFromChapter(currentChapterId, chapterId);
   },
 
   chapterVisibleFromChapter: function(currentChapterId, otherChapterId) {

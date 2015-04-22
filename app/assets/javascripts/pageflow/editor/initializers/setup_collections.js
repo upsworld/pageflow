@@ -10,6 +10,11 @@ pageflow.app.addInitializer(function(options) {
   pageflow.entry = new pageflow.Entry(options.entry);
   pageflow.theming = new pageflow.Theming(options.theming);
 
+  pageflow.entryData = new pageflow.PreviewEntryData({
+    chapters: pageflow.chapters,
+    pages: pageflow.pages
+  });
+
   pageflow.pages.sort();
 
   pageflow.editor.failures.watch(pageflow.entry);

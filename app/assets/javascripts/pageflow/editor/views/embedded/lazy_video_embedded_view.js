@@ -15,7 +15,7 @@ pageflow.LazyVideoEmbeddedView = Backbone.Marionette.View.extend({
   },
 
   update: function() {
-    if (this.videoPlayer.isPresent() || this.model.hasChanged(this.options.propertyName)) {
+    if (this.videoPlayer.isPresent() && this.model.hasChanged(this.options.propertyName)) {
       var paused = this.videoPlayer.paused();
 
       this.videoPlayer.src(this.model.getVideoFileSources(this.options.propertyName));

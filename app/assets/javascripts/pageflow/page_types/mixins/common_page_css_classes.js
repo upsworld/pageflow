@@ -21,10 +21,17 @@ pageflow.commonPageCssClasses = {
       pageElement.addClass('scroll_indicators_' + configuration.get('scroll_indicator_mode'));
     }
 
-    var noTextContent = !_(['title','subtitle','tagline','text']).some(function(attribute) {
-      return $.trim(configuration.get(attribute));
-    });
+    pageElement.toggleClass('no_text_content', !hasContent());
 
-    pageElement.toggleClass('no_text_content', noTextContent);
+    function hasContent() {
+      var hasTitle = _(['title','subtitle','tagline']).some(function(attribute) {
+        return !!$.trim(configuration.get(attribute));
+      });
+
+      var text = $('<div />').html(configuration.get('text')).text();
+      var hasText = !!$.trim(text);
+
+      return (hasTitle && !configuration.get('hide_title')) || hasText;
+    }
   }
 };

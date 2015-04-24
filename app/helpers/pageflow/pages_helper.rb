@@ -8,6 +8,7 @@ module Pageflow
       classes << "delayed_text_fade_in_#{page.configuration['delayed_text_fade_in']}" if page.configuration['delayed_text_fade_in'].present?
       classes << "scroll_indicators_#{page.configuration['scroll_indicator_mode']}" if page.configuration['scroll_indicator_mode'].present?
       classes << 'chapter_beginning' if page.position == 0
+      classes << 'no_text_content' if ['title','subtitle','tagline','text'].all? { |attribute| page.configuration[attribute].blank? }
       classes.join(' ')
     end
 
@@ -21,7 +22,9 @@ module Pageflow
 
     def shadow_div(options = {})
       style = options[:opacity] ? "opacity: #{options[:opacity] / 100.0};" : nil
-      content_tag(:div, '', :class => 'shadow', :style => style)
+      content_tag(:div, '', :class => 'shadow_wrapper') do
+        content_tag(:div, '', :class => 'shadow', :style => style)
+      end
     end
 
     def mobile_poster_image_div(config = {})

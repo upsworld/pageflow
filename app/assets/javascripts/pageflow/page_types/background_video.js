@@ -104,7 +104,7 @@ pageflow.pageType.register('background_video', _.extend({
       width: '100%',
       height: '100%'
     });
-    pageElement.find('.backgroundArea').data('videoPlayer', this.videoplayer);
+    pageElement.find('.backgroundArea').data('videoPlayer', this.videoPlayer);
 
     this.videoPlayer.ready(function() {
       that._resizeToCover(pageElement, configuration);

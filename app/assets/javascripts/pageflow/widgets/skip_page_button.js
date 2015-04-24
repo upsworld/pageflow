@@ -14,7 +14,10 @@
     },
 
     update: function() {
-      this.element.toggleClass('enabled', !!pageflow.slides.nextPageExists());
+      // FIXME
+      if (pageflow.slides) {
+        this.element.toggleClass('enabled', !!pageflow.slides.nextPageExists());
+      }
     }
   });
 }(jQuery));

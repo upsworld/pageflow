@@ -20,5 +20,11 @@ pageflow.commonPageCssClasses = {
     if (configuration.get('scroll_indicator_mode')) {
       pageElement.addClass('scroll_indicators_' + configuration.get('scroll_indicator_mode'));
     }
+
+    var noTextContent = _(['title','subtitle','tagline','text']).every(function(attribute) {
+      return $.trim(configuration.get(attribute));
+    });
+
+    pageElement.toggleClass('no_text_content', noTextContent);
   }
 };

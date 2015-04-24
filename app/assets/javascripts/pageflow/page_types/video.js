@@ -88,21 +88,18 @@ pageflow.pageType.register('video', _.extend({
 
     pageElement.find('.shadow').css({opacity: configuration.get('gradient_opacity') / 100});
 
-    var videoPlayer = this.videoPlayer;
-    videoPlayer.ensureCreated();
-
-    if (!this.srcDefined) {
-      videoPlayer.ready(function() {
-        videoPlayer.src(configuration.getVideoFileSources('video_file_id'));
-      });
-    }
-
-    if (!this.srcDefined || configuration.hasChanged('video_file_id')) {
-      this.srcDefined = true;
-      this.videoPlayer.src(configuration.getVideoFileSources('video_file_id'));
-    }
-
     this.updateVideoPoster(pageElement, configuration.getVideoPosterUrl());
+  },
+
+  embeddedEditorViews: function() {
+    return {
+      '.videoWrapper': {
+        view: pageflow.LazyVideoEmbeddedView,
+        options: {
+          propertyName: 'video_file_id'
+        }
+      }
+    };
   },
 
   _initVideoPlayer: function(pageElement, configuration) {
@@ -124,6 +121,7 @@ pageflow.pageType.register('video', _.extend({
     });
 
     this.videoPlayer = videoPlayer;
+    pageElement.find('.videoWrapper').data('videoPlayer', videoPlayer);
 
     videoPlayer.ready(function() {
       videoPlayer.showPosterImage();

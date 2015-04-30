@@ -3,23 +3,10 @@ pageflow.commonPageCssClasses = {
     pageElement.toggleClass('invert', configuration.get('invert'));
     pageElement.toggleClass('hide_title', configuration.get('hide_title'));
 
-    _.each(pageflow.Page.textPositions, function(position) {
-      pageElement.removeClass('text_position_' + position);
-    });
-    pageElement.addClass('text_position_' + configuration.get('text_position'));
-
-    _.each(pageflow.Page.delayedTextFadeIn, function(fade) {
-      pageElement.removeClass('delayed_text_fade_in_' + fade);
-    });
-    pageElement.addClass('delayed_text_fade_in_' + configuration.get('delayed_text_fade_in'));
-
-    _.each(pageflow.Page.scrollIndicatorModes, function(mode) {
-      pageElement.removeClass('scroll_indicators_' + mode);
-    });
-
-    if (configuration.get('scroll_indicator_mode')) {
-      pageElement.addClass('scroll_indicators_' + configuration.get('scroll_indicator_mode'));
-    }
+    toggleModeClass(pageflow.Page.textPositions, 'text_position');
+    toggleModeClass(pageflow.Page.delayedTextFadeIn, 'delayed_text_fade_in');
+    toggleModeClass(pageflow.Page.scrollIndicatorModes, 'scroll_indicator_mode');
+    toggleModeClass(pageflow.Page.scrollIndicatorOrientations, 'scroll_indicator_orientation');
 
     pageElement.toggleClass('no_text_content', !hasContent());
 
@@ -32,6 +19,18 @@ pageflow.commonPageCssClasses = {
       var hasText = !!$.trim(text);
 
       return (hasTitle && !configuration.get('hide_title')) || hasText;
+    }
+
+    function toggleModeClass(modes, name) {
+      var value = configuration.get(name);
+
+      _.each(modes, function(mode) {
+        pageElement.removeClass(name + '_' + mode);
+      });
+
+      if (value) {
+        pageElement.addClass(name + '_' + value);
+      }
     }
   }
 };

@@ -24,5 +24,9 @@ pageflow.ConfigurationEditorTabView.groups.define('options', function(options) {
     this.input('scroll_indicator_mode', pageflow.SelectInputView, {
       values: pageflow.Page.scrollIndicatorModes
     });
+
+    this.input('scroll_indicator_orientation', pageflow.SelectInputView, {
+      values: pageflow.Page.scrollIndicatorOrientations
+    });
   }
 });

@@ -64,18 +64,24 @@ pageflow.Audio.MultiPlayer = function(pool, options) {
     currentId = id;
 
     current.fadeOutAndPause(options.fadeDuration).then(function() {
-      startEventPropagation(player, id);
-      callback(player);
+      stopEventPropagation(current);
 
-      if (options.playFromBeginning) {
-        player.one('timeupdate', function() {
-          player.seek(0);
-        });
-      }
+      current = player;
+      startEventPropagation(current, id);
+
+      handlePlayFromBeginning(player).then(function() {
+        callback(player);
+      });
     });
+  }
 
-    stopEventPropagation(current);
-    current = player;
+  function handlePlayFromBeginning(player) {
+    if (options.playFromBeginning) {
+      return player.rewind();
+    }
+    else {
+      return new $.Deferred().resolve().promise();
+    }
   }
 
   function startEventPropagation(player, id) {

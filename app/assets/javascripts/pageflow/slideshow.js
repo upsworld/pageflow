@@ -116,17 +116,42 @@ pageflow.Slideshow = function($el, configurations) {
   this.update = function() {
     pages = $el.find('section.page');
 
-    pages.each(function(index) {
+    asyncEach(pages, function(index) {
       var $page = $(this);
 
       $page.page({
         index: index,
         configuration: configurations[$page.data('id')]
       });
+    }).then(function() {
+      ensureCurrentPage();
     });
-
-    ensureCurrentPage();
   };
+
+  function asyncEach(pages, fn) {
+    return new $.Deferred(function(deferred) {
+      var remaining = pages.toArray();
+      var index = 0;
+
+      function callAndWait() {
+        if (remaining.length) {
+          var page = remaining.pop();
+
+          index += 1;
+          fn.call(page, index);
+
+          setTimeout(function() {
+            callAndWait();
+          }, 1);
+        }
+        else {
+          deferred.resolve();
+        }
+      }
+
+      callAndWait();
+    }).promise();
+  }
 
   this.currentPage = function() {
     return currentPage;

@@ -116,7 +116,7 @@ pageflow.Slideshow = function($el, configurations) {
   this.update = function() {
     pages = $el.find('section.page');
 
-    asyncEach(pages, function(index) {
+    return asyncEach(pages, function(index) {
       var $page = $(this);
 
       $page.page({
@@ -240,16 +240,18 @@ pageflow.Slideshow.setup = function(options) {
     pageflow.audio
   );
 
-  if (options.beforeFirstUpdate) {
-    options.beforeFirstUpdate();
-  }
-
-  pageflow.slides.update();
-
   pageflow.history = pageflow.History.create(
     pageflow.slides,
     {simulate: options.simulateHistory}
   );
+
+  if (options.beforeFirstUpdate) {
+    options.beforeFirstUpdate();
+  }
+
+  pageflow.slides.update().then(function() {
+    pageflow.history.start();
+  });
 
   return pageflow.slides;
 };

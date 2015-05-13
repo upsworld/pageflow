@@ -1,9 +1,11 @@
 //=require ./slideshow/atmo
+//=require ./slideshow/lazy_page_widget
 //=require ./slideshow/page_widget
 //=require ./slideshow/scroller_widget
 //=require ./slideshow/scroll_indicator_widget
 //=require ./slideshow/hidden_text_indicator_widget
 //=require ./slideshow/progressive_preload
+//=require ./slideshow/adjacent_preparer
 //=require ./slideshow/swipe_gesture
 //=require ./slideshow/hide_text
 //=require ./slideshow/hide_text_on_swipe
@@ -116,42 +118,17 @@ pageflow.Slideshow = function($el, configurations) {
   this.update = function() {
     pages = $el.find('section.page');
 
-    return asyncEach(pages, function(index) {
+    pages.each(function(index) {
       var $page = $(this);
 
       $page.page({
         index: index,
         configuration: configurations[$page.data('id')]
       });
-    }).then(function() {
-      ensureCurrentPage();
     });
+
+    ensureCurrentPage();
   };
-
-  function asyncEach(pages, fn) {
-    return new $.Deferred(function(deferred) {
-      var remaining = pages.toArray();
-      var index = 0;
-
-      function callAndWait() {
-        if (remaining.length) {
-          var page = remaining.pop();
-
-          index += 1;
-          fn.call(page, index);
-
-          setTimeout(function() {
-            callAndWait();
-          }, 1);
-        }
-        else {
-          deferred.resolve();
-        }
-      }
-
-      callAndWait();
-    }).promise();
-  }
 
   this.currentPage = function() {
     return currentPage;
@@ -217,6 +194,7 @@ pageflow.Slideshow = function($el, configurations) {
   $el.find('.scroll_indicator').scrollIndicator({parent: this});
 
   this.scrollNavigator = new pageflow.DomOrderScrollNavigator(this);
+  this.preparer = pageflow.AdjacentPreparer.create(function() { return pages; }, this.scrollNavigator).attach(pageflow.events);
 };
 
 pageflow.Slideshow.setup = function(options) {
@@ -249,9 +227,8 @@ pageflow.Slideshow.setup = function(options) {
     options.beforeFirstUpdate();
   }
 
-  pageflow.slides.update().then(function() {
-    pageflow.history.start();
-  });
+  pageflow.slides.update();
+  pageflow.history.start();
 
   return pageflow.slides;
 };

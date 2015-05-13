@@ -66,16 +66,22 @@
       this._trigger('activate', null, {page: this});
       this._triggerPageTypeHook('activating');
       this._triggerDelayedPageTypeHook('activated');
-
-      this.prepareTimeout = setTimeout(_.bind(this.triggerPrepareNextPage, this), this.prepareNextPageTimeout());
     },
 
     prepare: function() {
       this._triggerPageTypeHook('prepare');
     },
 
+    unprepare: function() {
+      this._triggerPageTypeHook('unprepare');
+    },
+
     prepareNextPageTimeout: function() {
       return this.pageType.prepareNextPageTimeout;
+    },
+
+    linkedPages: function() {
+      return this._triggerPageTypeHook('linkedPages');
     },
 
     preload: function() {
@@ -108,7 +114,6 @@
       this._trigger('activate', null, {page: this});
       this._triggerPageTypeHook('activating');
 
-      this.prepareTimeout = setTimeout(_.bind(this.triggerPrepareNextPage, this), this.prepareNextPageTimeout());
       return duration;
     },
 
@@ -125,7 +130,6 @@
       this._trigger('deactivate');
       this._triggerPageTypeHook('deactivating');
 
-      clearTimeout(this.prepareTimeout);
       return duration;
     },
 
@@ -160,12 +164,6 @@
 
     _triggerPageTypeHook: function(name) {
       return this.pageType[name](this.element, this.configuration);
-    },
-
-    triggerPrepareNextPage: function() {
-      if($(this.element).next(".page").length > 0) {
-        $(this.element).next(".page").page('prepare', {});
-      }
     }
   });
 }(jQuery));

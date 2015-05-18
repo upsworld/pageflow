@@ -31,6 +31,25 @@
     update: function() {
       var configuration = this.slideshow.currentPageConfiguration();
       this.multiPlayer.fadeTo(configuration[attributeName]);
+    },
+
+    createMediaPlayerHooks: function(configuration) {
+      var atmo = this;
+
+      return {
+        before: function() {
+          if (configuration.atmo_during_playback === 'mute') {
+            return atmo.pause();
+          }
+          else if (configuration.atmo_during_playback === 'turn_down') {
+            return atmo.turnDown();
+          }
+        },
+
+        after: function() {
+          return atmo.resume();
+        }
+      };
     }
   });
 
@@ -44,23 +63,6 @@
         playFromBeginning: false
       })
     );
-  };
-
-  pageflow.Atmo.createMediaPlayerHooks = function(configuration) {
-    return {
-      before: function() {
-        if (configuration.atmo_during_playback === 'mute') {
-          return pageflow.atmo.pause();
-        }
-        else if (configuration.atmo_during_playback === 'turn_down') {
-          return pageflow.atmo.turnDown();
-        }
-      },
-
-      after: function() {
-        return pageflow.atmo.resume();
-      }
-    };
   };
 
   pageflow.Atmo.duringPlaybackModes = ['play', 'mute', 'turn_down'];

@@ -113,7 +113,7 @@ pageflow.pageType.register('video', _.extend({
       customControlsOnMobile: true,
 
       volumeFading: true,
-      hooks: pageflow.Atmo.createMediaPlayerHooks(configuration),
+      hooks: pageflow.atmo.createMediaPlayerHooks(configuration),
 
       mediaEvents: true,
       context: {

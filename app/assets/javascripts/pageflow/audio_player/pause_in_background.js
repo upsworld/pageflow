@@ -19,24 +19,12 @@ pageflow.AudioPlayer.pauseInBackground = function(player) {
 
   function pauseIfProbeIntervalHalted() {
     if (intervalHalted()) {
-      if (!player.paused()) {
-        whenBackInForeground(function() {
-          player.playAndFadeIn(500);
-        });
-      }
-
       player.pause();
     }
   }
 
   function intervalHalted() {
     return interval && lastInterval < new Date().getTime() - resolution * 5;
-  }
-
-  function whenBackInForeground(callback) {
-    setTimeout(function() {
-      callback();
-    }, 1);
   }
 
   player.on('play', startProbeInterval);

@@ -10,13 +10,10 @@ pageflow.AdjacentPages = pageflow.Object.extend({
     var nextPage = this.scrollNavigator.getNextPage(page.element, pages);
 
     if (nextPage.length) {
-      console.log('next');
       result.push(nextPage.page('instance'));
     }
 
     _(page.linkedPages()).each(function(permaId) {
-      console.log('linked ' + permaId + ' ' + pages.filter('#' + permaId).page('instance'));
-
       result.push(pages.filter('#' + permaId).page('instance'));
     }, this);
 

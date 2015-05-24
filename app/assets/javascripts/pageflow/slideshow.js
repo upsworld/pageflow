@@ -176,15 +176,13 @@ pageflow.Slideshow = function($el, configurations) {
     currentPage.page('resize');
   };
 
-  if (pageflow.entryData.getThemingOption('page_change_by_scrolling')) {
-    $el.on('scrollerbumpup', _.bind(function(event) {
-      this.back();
-    }, this));
+  $el.on('scrollerbumpup', _.bind(function(event) {
+    this.back();
+  }, this));
 
-    $el.on('scrollerbumpdown', _.bind(function(event) {
-      this.next();
-    }, this));
-  }
+  $el.on('scrollerbumpdown', _.bind(function(event) {
+    this.next();
+  }, this));
 
   $el.on('click', 'a.to_top', _.bind(function() {
     this.goToLandingPage();

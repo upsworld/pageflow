@@ -213,6 +213,50 @@ describe Admin::EntriesController do
 
       expect(entry.reload.folder).to eq(folder)
     end
+
+    it 'allows admin to update feature_configuration through feature_states param' do
+      user = create(:user, :admin)
+      entry = create(:entry)
+
+      sign_in(user)
+      patch(:update,
+            id: entry.id,
+            entry: {
+              feature_states: {
+                fancy_page_type: 'enabled'
+              }
+            })
+
+      expect(entry.reload.feature_state('fancy_page_type')).to eq(true)
+    end
+
+    it 'does not allow account_manager to update feature_configuration' do
+      user = create(:user, :account_manager)
+      entry = create(:entry, account: user.account)
+
+      sign_in(user)
+      patch(:update,
+            id: entry.id,
+            entry: {
+              feature_states: {
+                fancy_page_type: 'enabled'
+              }
+            })
+
+      expect(entry.reload.feature_state('fancy_page_type')).not_to eq(true)
+    end
+
+    it 'redirects back to tab' do
+      entry = create(:entry)
+
+      sign_in(create(:user, :admin))
+      patch(:update,
+            id: entry.id,
+            entry: {},
+            tab: 'features')
+
+      expect(response).to redirect_to(admin_entry_path(entry, tab: 'features'))
+    end
   end
 
   describe '#preview' do

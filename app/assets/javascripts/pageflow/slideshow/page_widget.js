@@ -26,7 +26,13 @@
       this.pageType = pageflow.pageType.get(this.element.data('template'));
       this.element.data('pageType', this.pageType);
 
-      this.content = this.element.find('.scroller');
+      if (this.pageType.scroller === false) {
+        this.content = $();
+      }
+      else {
+        this.content = this.element.find('.scroller');
+      }
+
       this.content.scroller(this.pageType.scrollerOptions || {});
       this.pageType.scroller = this.content.scroller('instance');
 
@@ -116,7 +122,7 @@
 
       this.content.scroller('resetPosition', {position: options.position});
       this._trigger('activate', null, {page: this});
-      this._triggerPageTypeHook('activating');
+      this._triggerPageTypeHook('activating', {position: options.position});
 
       return duration;
     },
@@ -166,8 +172,8 @@
       });
     },
 
-    _triggerPageTypeHook: function(name) {
-      return this.pageType[name](this.element, this.configuration);
+    _triggerPageTypeHook: function(name, options) {
+      return this.pageType[name](this.element, this.configuration, options || {});
     },
 
     _setupHideTextOnSwipe: function() {

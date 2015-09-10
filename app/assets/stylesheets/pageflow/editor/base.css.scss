@@ -71,6 +71,7 @@
   @import "./back_button_decorator";
   @import "./widgets";
   @import "./page_links";
+  @import "./storyline_picker";
 
   a.publish {
     @include eye-icon;
@@ -98,6 +99,10 @@
     @include icon-button(#d00);
     @include trash-icon;
     float: right;
+
+    &.faded {
+      opacity: 0.3;
+    }
   }
 
   a.upload {

@@ -2,7 +2,217 @@
 
 ### Changes on `master`
 
-[Compare changes](https://github.com/codevise/pageflow/compare/v0.7.2...master)
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.8.0...master)
+
+##### Breaking Changes
+
+- The internal links page type has been extracted to the
+  [`pageflow-internal-links`](https://github.com/codevise/pageflow-internal-links)
+  gem. ([#316](https://github.com/codevise/pageflow/pull/316)) To keep
+  using it, follow the instructions found in the gem's
+  [README](https://github.com/codevise/pageflow-internal-links).
+  
+##### Deprecations
+
+- The configuration API for registering new page types has
+  changed. Turn calls of the form
+
+        config.register_page_type(Pageflow::Some.page_type)
+
+  into
+
+        config.page_types.register(Pageflow::Some.page_type)
+
+  The old method still exists for now, but will be removed before
+  version 1.0.
+  ([#297](https://github.com/codevise/pageflow/pull/297))
+
+##### Manual Update Step
+
+- Some of the new features have to be enabled manually via the new
+  feature toggle UI inside the admin. Visit the _Features_ tab on the
+  account's admin page to view a list of available feature
+  toggles. Note that some of the graphical features currently have no
+  effect in the default theme.
+
+##### Public Site
+
+- Password protection for published entries.
+  ([#301](https://github.com/codevise/pageflow/pull/301),
+   [#304](https://github.com/codevise/pageflow/pull/304))
+- Atmo audios spanning multiple pages.
+  ([#332](https://github.com/codevise/pageflow/pull/332),
+   [#361](https://github.com/codevise/pageflow/pull/361))
+- Option to automatically change page on video end.
+  ([#334](https://github.com/codevise/pageflow/pull/334),
+   [#339](https://github.com/codevise/pageflow/pull/339))
+- Option to fade in page titles after a delay.
+  ([#338](https://github.com/codevise/pageflow/pull/338))
+- Additional page transitions.
+  ([#326](https://github.com/codevise/pageflow/pull/326),
+   [#363](https://github.com/codevise/pageflow/pull/363))
+- Improve display of file rights.
+  ([#300](https://github.com/codevise/pageflow/pull/300))
+- Slideshow optimization to improve initial load time in large
+  entries.
+  ([#330](https://github.com/codevise/pageflow/pull/330),
+   [#352](https://github.com/codevise/pageflow/pull/352))
+- Minor improvements to the video page type.
+  ([#355](https://github.com/codevise/pageflow/pull/355),
+   [#333](https://github.com/codevise/pageflow/pull/333),
+   [#357](https://github.com/codevise/pageflow/pull/357),
+   [#353](https://github.com/codevise/pageflow/pull/353),
+   [#331](https://github.com/codevise/pageflow/pull/331))
+- Bug fix: Fix copyright links in mobile navigation.
+  ([#377](https://github.com/codevise/pageflow/pull/377))
+- Bug fix: Find share target page in published revision
+  ([#375](https://github.com/codevise/pageflow/pull/375))
+- Bug fix: Improve local storage detection to prevent failure in
+  Safari.
+  ([#360](https://github.com/codevise/pageflow/pull/360))
+
+##### Admin/Editor
+
+- Duplicating entries.
+  ([#372](https://github.com/codevise/pageflow/pull/372))
+- Hotkey to edit the current page.
+  ([#340](https://github.com/codevise/pageflow/pull/340))
+- Optimized video resouce management in editor for large entries.
+  ([#337](https://github.com/codevise/pageflow/pull/337))
+  
+##### Rails Engine
+
+Public APIs to be used by Pageflow plugins:
+
+- Introduce features API.
+  ([#297](https://github.com/codevise/pageflow/pull/297),
+   [#320](https://github.com/codevise/pageflow/pull/320),
+   [#325](https://github.com/codevise/pageflow/pull/325))
+- Introduce API for audio playback.
+  ([#319](https://github.com/codevise/pageflow/pull/319),
+   [#356](https://github.com/codevise/pageflow/pull/356))
+- Enhance API for page types to configure their scroller.
+  ([#321](https://github.com/codevise/pageflow/pull/321),
+   [#327](https://github.com/codevise/pageflow/pull/327),
+   [#336](https://github.com/codevise/pageflow/pull/336))
+- Introduce API to display multimedia alert.
+  ([#359](https://github.com/codevise/pageflow/pull/359))
+- Introduce API to register new page transitions.
+  ([#326](https://github.com/codevise/pageflow/pull/326))
+- Introduce history API with adapters for hash, push state and
+  simulation.
+  ([#322](https://github.com/codevise/pageflow/pull/322))
+- Introduce page type API to manage internal links.
+  ([#324](https://github.com/codevise/pageflow/pull/324))
+- Introduce API to customize page change behavior via scrolling.
+  ([#323](https://github.com/codevise/pageflow/pull/323))
+- Promote `pageflow.Object` to `application.js`.
+  ([#296](https://github.com/codevise/pageflow/pull/296),
+   [#298](https://github.com/codevise/pageflow/pull/298))
+- Dispatch `page:update` event via `pageflow.events`.
+  ([#302](https://github.com/codevise/pageflow/pull/302))
+- Panorama image file style.
+  ([#344](https://github.com/codevise/pageflow/pull/344))
+
+Theme options:
+
+- Add theme option to disable page change by scrolling.
+  ([#349](https://github.com/codevise/pageflow/pull/349))
+- Let themes disable hide text on swipe functionality.
+  ([#358](https://github.com/codevise/pageflow/pull/358))
+- Add options to configure orientation and display of scroll
+  indicators.
+  ([#329](https://github.com/codevise/pageflow/pull/329))
+- For themes that support non-linear Pagefows, chapters can now be
+  organized in a hierachy.
+  ([#318](https://github.com/codevise/pageflow/pull/318),
+   [#345](https://github.com/codevise/pageflow/pull/345),
+   [#348](https://github.com/codevise/pageflow/pull/348))
+
+Extracted reusable jQuery widgets:
+
+- Fullscreen button.
+  ([#350](https://github.com/codevise/pageflow/pull/350))
+- Parent page button.
+  ([#347](https://github.com/codevise/pageflow/pull/347))
+- Additional player controls buttons.
+  ([#346](https://github.com/codevise/pageflow/pull/346),
+   [#362](https://github.com/codevise/pageflow/pull/362),
+   [#354](https://github.com/codevise/pageflow/pull/354))
+- Use top button to go to landing page.
+  ([#351](https://github.com/codevise/pageflow/pull/351))
+- Extract social share links into reusable partials.
+  ([#335](https://github.com/codevise/pageflow/pull/335))
+
+Reusable components for the editor Backbone application:
+
+- Generic button and list views.
+  ([#343](https://github.com/codevise/pageflow/pull/343))
+- Generic reference input view.
+  ([#342](https://github.com/codevise/pageflow/pull/342))
+- Add visible option for input backbone views.
+  ([#341](https://github.com/codevise/pageflow/pull/341))
+- Options for configuration editor tab groups.
+  ([#328](https://github.com/codevise/pageflow/pull/328))
+- Allow displaying custom views in the editor main region.
+  ([#317](https://github.com/codevise/pageflow/pull/317))
+- Add `appendSubview` method.
+  ([#310](https://github.com/codevise/pageflow/pull/310))
+- Improve `SubsetCollection`.
+  ([#309](https://github.com/codevise/pageflow/pull/309))
+- Bug fix: Set `isDestroying` before triggering `destroying` event.
+  ([#312](https://github.com/codevise/pageflow/pull/312))
+- Bug fix: Save `TextiInputView` on close.
+  ([#311](https://github.com/codevise/pageflow/pull/311))
+
+Enhancements for app development:
+
+- Allow overriding attachments scope name.
+  ([#303](https://github.com/codevise/pageflow/pull/303))
+- Bug fix: Add spec fixtures required by factory girl to gem files.
+  ([#370](https://github.com/codevise/pageflow/pull/370),
+   [#371](https://github.com/codevise/pageflow/pull/371),
+   [#368](https://github.com/codevise/pageflow/pull/368))
+- Use environment variables for api keys in generated initializer.
+  ([#306](https://github.com/codevise/pageflow/pull/306))
+
+##### Internals
+
+- Include pageflow version in entry css url to invalidate CDN on gem
+  updates.
+  ([#376](https://github.com/codevise/pageflow/pull/376))
+- Improve stability of feature specs.
+  ([#299](https://github.com/codevise/pageflow/pull/299))
+- Disable bandwidth feature detection in test environment.
+  ([#308](https://github.com/codevise/pageflow/pull/308))
+- Bug fix: Fix paperclip version to 4.2 until 4.3 issues are resolved.
+  ([#307](https://github.com/codevise/pageflow/pull/307))
+
+### Version 0.8.0
+
+2015-05-28
+
+[Compare changes](https://github.com/codevise/pageflow/compare/v0.7.2...v0.8.0)
+
+##### Public Site
+
+- Bug fix: Do not hang at loading spinner if local storage is not
+  available.
+  ([#295](https://github.com/codevise/pageflow/pull/295))
+- Bug fix: Ensure correct social sharing images and descriptions are
+  used.
+  ([#288](https://github.com/codevise/pageflow/pull/288))
+- Bug fix: Ensure audio page text is not hidden by player controls on
+  mobile.
+  ([#263](https://github.com/codevise/pageflow/pull/263),
+   [#267](https://github.com/codevise/pageflow/pull/267))
+
+##### Admin/Editor
+
+- Use locale from request header if user has not selected one.
+  ([#265](https://github.com/codevise/pageflow/pull/265))
+- Performance improvement: Speed up file polling requests in editor.
+  ([#276](https://github.com/codevise/pageflow/pull/276))
 
 ##### Rails Engine
 
@@ -17,11 +227,18 @@
 
 ##### Internals
 
+- Upgrade to Paperclip 4.2 to improve temp file removal.
+  ([#289](https://github.com/codevise/pageflow/pull/289))
 - Include teaspoon javascript tests in travis run.
-  ([#264](https://github.com/codevise/pageflow/pull/264))
+  ([#264](https://github.com/codevise/pageflow/pull/264),
+   [#294](https://github.com/codevise/pageflow/pull/294))
 - Use container based travis infrastructure and cache gem bundle
   between test runs.
   ([#270](https://github.com/codevise/pageflow/pull/270))
+- Improve install instructions in README.
+  ([#283](https://github.com/codevise/pageflow/pull/283),
+   [#285](https://github.com/codevise/pageflow/pull/285),
+   [#293](https://github.com/codevise/pageflow/pull/293))
 - Bug fix: Reset capybara session before cleaning the database in
   tests.
   ([#269](https://github.com/codevise/pageflow/pull/269))
@@ -66,10 +283,10 @@
   For language selection to work inside the admin, you need to add the
   following line to the setup block inside your
   `config/initializers/active_admin.rb` file:
-  
+
         ActiveAdmin.setup do |config|
           Pageflow.active_admin_settings(config)
-  
+
           # ...
         end
 

@@ -834,6 +834,8 @@ en:
           audio_files: Audios
           image_files: Images
           video_files: Videos
+      quotas:
+        loading: Checking quotas...
       templates:
         back_button_decorator:
           outline: Outline
@@ -977,7 +979,7 @@ en:
         swipe_indicator: Swipe to continue
       ie8_hint:
         close: Close
-        deprecated_browser: <p>Your browser is outdated and this page might not work as intended. We recommend upgrading to a current browser version. Please visit <a href="http://www.browserchoice.eu/">http://www.browserchoice.eu/</a> for download suggestions.</p>
+        deprecated_browser: <p>Your browser is outdated and this page might not work as intended. We recommend upgrading to a current browser version.</p>
       mobile_navigation:
         imprint: Imprint
         overview: Overview
@@ -1443,7 +1445,7 @@ en:
 
           Under „Title and Options“ you can set up basic appearance
 
-          parameters as well as the title, language and lega
+          parameters as well as the title, language and legal
 
           notice. You can also decide which content should be
 
@@ -1478,9 +1480,7 @@ en:
           and chapters any time.
 
 
-          For more details see: [Chapter and Pages](#pageflow.help_entries.outline)
-
-'
+          For more details see: [Chapter and Pages](#pageflow.help_entries.outline)'
       page_options:
         menu_item: General Page Options
         text: ! '# General Page Options
@@ -1631,35 +1631,7 @@ en:
 '
       publishing:
         menu_item: Publishing
-        text: ! '# Publishing
-
-
-          Click on the „Publish“ button to publish your Pageflow. A
-
-          Pageflow can be published at any point in time. Published
-
-          Pageflows can also be unpublished manually at any time. If a
-
-          Pageflow has already been published, changes will not be
-
-          shown until you publish your report again.  A Pageflow can
-
-          only be edited by one author at one time.
-
-
-          Thumbnail for embedding the Pageflow on external websites
-
-          After publishing your Pageflow, the system generates a
-
-          thumbnail, which can be embedded as an iframe to the
-
-          hyperlink of another website. By means of the code, the size
-
-          of the iframe can be adjusted. The minimum size is a height
-
-          150px and a width of 220px.
-
-'
+        text: ! "# Publishing\n\nClick on the „Publish“ button to publish your Pageflow. A\nPageflow can be published at any point in time. \n\nBesides this, there is the possibility to publish Pageflows with \na password protection. Just activate „Protect with password“. \nPageflow uses the name of the account as user name and \nautomatically generates a password, which can be changed afterwords. \n\nAlready published stories can also be protected with a password by \npublishing another version - the other way round works as well. \nFor this please just click on the „Publishing“ button. The following \nsteps will then be shown and explained within the dialog window.\n\nPublished\nPageflows can also be unpublished manually at any time. If a\nPageflow has already been published, changes will not be\nshown until you publish your report again.  A Pageflow can\nonly be edited by one author at one time.\n\nThumbnail for embedding the Pageflow on external websites\nAfter publishing your Pageflow, the system generates a\nthumbnail, which can be embedded as an iframe to the\nhyperlink of another website. By means of the code, the size\nof the iframe can be adjusted. The minimum size is a height\n150px and a width of 220px."
     helpers:
       entries:
         global_links: Global links

@@ -9,6 +9,12 @@ module Pageflow
         expect(entry.draft).to be_present
       end
 
+      it 'can skip draft creation' do
+        entry = create(:entry, skip_draft_creation: true)
+
+        expect(entry.draft).to be_blank
+      end
+
       it 'sets draft home_button_enabled to home_button_enabled_by_default of accounts default_theming' do
         theming = create(:theming, home_button_enabled_by_default: true)
         entry = create(:entry, theming: theming)
@@ -22,6 +28,12 @@ module Pageflow
         entry = create(:entry, theming: theming)
 
         expect(entry.draft.widgets).to include_record_with(role: 'header', type_name: 'theming_header')
+      end
+
+      it 'creates a first storyline in the draft' do
+        entry = create(:entry)
+
+        expect(entry.draft.storylines).not_to be_empty
       end
     end
 
@@ -114,6 +126,99 @@ module Pageflow
           end
         end
       end
+
+      context 'with :password and :password_protected option' do
+        it 'publishes entry with password protection' do
+          creator = create(:user)
+          entry = create(:entry)
+
+          entry.publish(:creator => creator,
+                        :password_protected => true,
+                        :password => 'abc123abc')
+
+          expect(entry).to be_published_with_password('abc123abc')
+        end
+      end
+
+      context 'with :password options but with :password_protected option false' do
+        it 'publishes entry without password protection' do
+          creator = create(:user)
+          entry = create(:entry)
+
+          entry.publish(:creator => creator,
+                        :password_protected => false,
+                        :password => 'abc123abc')
+
+          expect(entry).to be_published_without_password
+        end
+
+        it 'does not store password' do
+          creator = create(:user)
+          entry = create(:entry)
+
+          entry.publish(:creator => creator,
+                        :password_protected => false,
+                        :password => 'abc123abc')
+
+          expect {
+            entry.publish(:creator => creator,
+                          :password_protected => true)
+          }.to raise_error(Entry::PasswordMissingError)
+        end
+
+        it 'forgets password' do
+          creator = create(:user)
+          entry = create(:entry)
+
+          entry.publish(:creator => creator,
+                        :password_protected => true,
+                        :password => 'abc123abc')
+          entry.publish(:creator => creator,
+                        :password_protected => false)
+
+          expect {
+            entry.publish(:creator => creator,
+                          :password_protected => true)
+          }.to raise_error(Entry::PasswordMissingError)
+        end
+      end
+
+      context 'with :password_protected but without :password option' do
+        it 'publishes entry with same password previously published with' do
+          creator = create(:user)
+          entry = create(:entry)
+
+          entry.publish(:creator => creator,
+                        :password_protected => true,
+                        :password => 'abc123abc')
+          entry.publish(:creator => creator,
+                        :password_protected => true)
+
+          expect(entry).to be_published_with_password('abc123abc')
+        end
+
+        it 'fails if entry has not been published yet' do
+          creator = create(:user)
+          entry = create(:entry)
+
+          expect {
+            entry.publish(:creator => creator,
+                          :password_protected => true)
+          }.to raise_error(Entry::PasswordMissingError)
+        end
+
+        it 'fails if entry was previously published without password protection' do
+          creator = create(:user)
+          entry = create(:entry)
+
+          entry.publish(:creator => creator)
+
+          expect {
+            entry.publish(:creator => creator,
+                          :password_protected => true)
+          }.to raise_error(Entry::PasswordMissingError)
+        end
+      end
     end
 
     describe '#restore' do
@@ -158,6 +263,20 @@ module Pageflow
           entry.restore(:revision => earlier_revision, :creator => creator)
 
           expect(entry.draft(true).title).to eq('the way it was')
+        end
+
+        it 'resets password_protected flag' do
+          creator = create(:user)
+          entry = create(:entry)
+          earlier_revision = create(:revision,
+                                    :published,
+                                    :title => 'the way it was',
+                                    :entry => entry,
+                                    :password_protected => true)
+
+          entry.restore(:revision => earlier_revision, :creator => creator)
+
+          expect(entry.draft(true)).not_to be_password_protected
         end
       end
 
@@ -240,6 +359,16 @@ module Pageflow
 
         expect(revision.snapshot_type).to eq('user')
       end
+    end
+  end
+
+  describe '#duplicate' do
+    it 'creates a new entry' do
+      entry = create(:entry)
+
+      expect {
+        entry.duplicate
+      }.to change { Entry.count }
     end
   end
 end

@@ -33,6 +33,22 @@ module Pageflow
     # new users
     attr_accessor :mailer_sender
 
+    # Extend the configuration based on feature flags set for accounts
+    # or entries.
+    #
+    # @example
+    #
+    # Make a page type only available if a feature flag is set on the
+    # entry or its account
+    #
+    #   config.features.register('some_special_page_type' do |config
+    #     config.page_types.register(Pageflow::SomeSpecial.page_type)
+    #   end
+    #
+    # @since edge
+    # @returns [Features}
+    attr_reader :features
+
     # Subscribe to hooks in order to be notified of events. Any object
     # with a call method can be a subscriber
     #
@@ -59,6 +75,11 @@ module Pageflow
     #
     # @return [Themes]
     attr_reader :themes
+
+    # Register new types of pages.
+    # @return [PageTypes]
+    # @since edge
+    attr_reader :page_types
 
     # List of {FileType} instances provided by page types.
     # @return [FileTypes]
@@ -167,17 +188,32 @@ module Pageflow
     # @since 0.7
     attr_accessor :available_locales
 
+    # How to handle https requests for URLs which will have assets in the page.
+    # If you wish to serve all assets over http and prevent mixed-content warnings,
+    # you can force a redirect to http. The inverse is also true: you can force
+    # a redirect to https for all http requests.
+    #
+    # @example
+    #
+    #     config.public_https_mode = :prevent (default) # => redirects https to http
+    #     config.public_https_mode = :enforce # => redirects http to https
+    #     config.public_https_mode = :ignore # => does nothing
+    # @since edge
+    attr_accessor :public_https_mode
+
     def initialize
-      @paperclip_filesystem_default_options = {}
-      @paperclip_s3_default_options = {}
+      @paperclip_filesystem_default_options = {validate_media_type: false}
+      @paperclip_s3_default_options = {validate_media_type: false}
 
       @zencoder_options = {}
 
       @mailer_sender = 'pageflow@example.com'
 
+      @features = Features.new
       @hooks = Hooks.new
       @quotas = Quotas.new
       @themes = Themes.new
+      @page_types = PageTypes.new
       @file_types = FileTypes.new(page_types)
       @widget_types = WidgetTypes.new
       @help_entries = HelpEntries.new
@@ -194,6 +230,8 @@ module Pageflow
       @admin_resource_tabs = Pageflow::Admin::Tabs.new
 
       @available_locales = Engine.config.i18n.available_locales
+
+      @public_https_mode = :prevent
     end
 
     # Activate a plugin.
@@ -204,24 +242,10 @@ module Pageflow
       plugin.configure(self)
     end
 
-    # Make a page type available for use in the system.
+    # @deprecated Use `config.page_types.register` instead.
     def register_page_type(page_type)
-      page_types << page_type
-
-      @page_types_by_name ||= {}
-      @page_types_by_name[page_type.name] = page_type
-    end
-
-    def lookup_page_type(name)
-      @page_types_by_name.fetch(name)
-    end
-
-    def page_types
-      @page_types ||= []
-    end
-
-    def page_type_names
-      page_types.map(&:name)
+      ActiveSupport::Deprecation.warn('Pageflow::Configuration#register_page_type is deprecated. Use config.page_types.register instead.', caller)
+      page_types.register(page_type)
     end
 
     def revision_components
@@ -232,6 +256,24 @@ module Pageflow
     def theming_url_options(theming)
       options = public_entry_url_options
       options.respond_to?(:call) ? options.call(theming) : options
+    end
+
+    # @api private
+    def enable_features(names)
+      features.enable(names, FeatureLevelConfiguration.new(self))
+    end
+
+    # @api private
+    def enable_all_features
+      features.enable_all(FeatureLevelConfiguration.new(self))
+    end
+
+    # Restricts the configuration interface to those parts which can
+    # be used from inside features.
+    class FeatureLevelConfiguration < Struct.new(:config)
+      delegate :page_types, to: :config
+      delegate :widget_types, to: :config
+      delegate :help_entries, to: :config
     end
   end
 end

@@ -6,15 +6,21 @@ module Pageflow
     attr_reader :entry, :revision
     attr_accessor :share_target
 
-    delegate(:id, :account, :theming, :to_model, :to_key, :persisted?, :to => :entry)
+    delegate(:id,
+             :account, :theming,
+             :enabled_feature_names,
+             :to_model, :to_key, :persisted?,
+             :authenticate,
+             :to => :entry)
 
-    delegate(:widgets, :chapters, :pages, :files,
+    delegate(:widgets, :storylines, :chapters, :pages, :files,
              :image_files, :video_files, :audio_files,
              :title, :summary, :credits, :manual_start,
              :emphasize_chapter_beginning,
              :emphasize_new_pages,
              :share_image_id, :share_image_x, :share_image_y,
              :locale,
+             :password_protected?,
              :to => :revision)
 
     def initialize(entry, revision = nil)

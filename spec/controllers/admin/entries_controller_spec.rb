@@ -213,6 +213,50 @@ describe Admin::EntriesController do
 
       expect(entry.reload.folder).to eq(folder)
     end
+
+    it 'allows admin to update feature_configuration through feature_states param' do
+      user = create(:user, :admin)
+      entry = create(:entry)
+
+      sign_in(user)
+      patch(:update,
+            id: entry.id,
+            entry: {
+              feature_states: {
+                fancy_page_type: 'enabled'
+              }
+            })
+
+      expect(entry.reload.feature_state('fancy_page_type')).to eq(true)
+    end
+
+    it 'does not allow account_manager to update feature_configuration' do
+      user = create(:user, :account_manager)
+      entry = create(:entry, account: user.account)
+
+      sign_in(user)
+      patch(:update,
+            id: entry.id,
+            entry: {
+              feature_states: {
+                fancy_page_type: 'enabled'
+              }
+            })
+
+      expect(entry.reload.feature_state('fancy_page_type')).not_to eq(true)
+    end
+
+    it 'redirects back to tab' do
+      entry = create(:entry)
+
+      sign_in(create(:user, :admin))
+      patch(:update,
+            id: entry.id,
+            entry: {},
+            tab: 'features')
+
+      expect(response).to redirect_to(admin_entry_path(entry, tab: 'features'))
+    end
   end
 
   describe '#preview' do
@@ -295,6 +339,52 @@ describe Admin::EntriesController do
       expect {
         post(:snapshot, :id => entry.id)
       }.not_to change { entry.revisions.count }
+    end
+  end
+
+  describe '#duplicate' do
+    it 'does not allow account manager to duplicate entries of other account' do
+      account = create(:account)
+      entry = create(:entry)
+
+      sign_in(create(:user, :account_manager))
+
+      expect {
+        post(:duplicate, :id => entry.id)
+      }.not_to change { Pageflow::Entry.count }
+    end
+
+    it 'allows account manager to duplicate entries of own account' do
+      user = create(:user, :account_manager)
+      entry = create(:entry, :account => user.account)
+
+      sign_in(user)
+
+      expect {
+        post(:duplicate, :id => entry.id)
+      }.to change { Pageflow::Entry.count }
+    end
+
+    it 'allows admin to duplicate entries of other accounts' do
+      account = create(:account)
+      entry = create(:entry)
+
+      sign_in(create(:user, :admin))
+
+      expect {
+        post(:duplicate, :id => entry.id)
+      }.to change { Pageflow::Entry.count }
+    end
+
+    it 'does not allows editor to duplicate entries even as a member' do
+      user = create(:user, :editor)
+      entry = create(:entry, :with_member => user, :account => user.account)
+
+      sign_in(user)
+
+      expect {
+        post(:duplicate, :id => entry.id)
+      }.not_to change { Pageflow::Entry.count }
     end
   end
 end

@@ -3,9 +3,9 @@ pageflow.EntryPreviewView = Backbone.Marionette.ItemView.extend({
   className: 'container',
 
   ui: {
-    header: '.header',
-    entry: '.entry',
-    overview: '.overview'
+    header: '> .header',
+    entry: '> .entry',
+    overview: '> .overview'
   },
 
   initialize: function() {
@@ -20,10 +20,7 @@ pageflow.EntryPreviewView = Backbone.Marionette.ItemView.extend({
       blankSlateViewConstructor: pageflow.BlankEntryView
     }));
 
-    this.ui.entry.append($('<div class="scroll_indicator indicator">' +
-                           I18n.t('pageflow.editor.views.entry_preview_view.scroll_hint',
-                                  {locale: this.model.configuration.get('locale') }) +
-                           '</div>'));
+    this.ui.entry.append($('#indicators_seed > *'));
 
     this.update();
 
@@ -41,8 +38,11 @@ pageflow.EntryPreviewView = Backbone.Marionette.ItemView.extend({
   },
 
   onShow: function() {
-    var slideshow = pageflow.slides =  new pageflow.Slideshow(this.ui.entry);
-    slideshow.update();
+    var slideshow = pageflow.Slideshow.setup({
+      element: this.ui.entry,
+      enabledFeatureNames: pageflow.entry.get('enabled_feature_names'),
+      simulateHistory: true
+    });
 
     this.listenTo(this.model.pages, 'add', function() {
       slideshow.update();
@@ -84,8 +84,8 @@ pageflow.EntryPreviewView = Backbone.Marionette.ItemView.extend({
     $.ajax(this.model.url() + '/partials').success(function(response) {
       var partials = $('<div />').html(response);
 
-      view.ui.header.replaceWith(partials.find('.header'));
-      view.ui.overview.replaceWith(partials.find('.overview'));
+      view.ui.header.replaceWith(partials.find('> .header'));
+      view.ui.overview.replaceWith(partials.find('> .overview'));
       view.bindUIElements();
 
       view.updateWidgets(partials);

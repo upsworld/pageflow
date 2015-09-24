@@ -16,6 +16,14 @@ div.page_links {
     top: 4px;
   }
 
+  a.remove {
+    @include icon-only-button(#aaa);
+    @include trash-icon;
+    position: absolute;
+    right: 40px;
+    top: 4px;
+  }
+
   li {
     margin-bottom: 2px;
 

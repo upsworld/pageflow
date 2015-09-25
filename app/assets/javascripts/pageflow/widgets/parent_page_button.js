@@ -20,7 +20,8 @@
         var chapterConfiguration = pageflow.entryData.getChapterConfiguration(chapterId);
 
         element.toggle(pageflow.slides.parentPageExists() &&
-                       chapterConfiguration.display_parent_page_button);
+          (chapterConfiguration.display_parent_page_button === undefined ||
+          chapterConfiguration.display_parent_page_button));
       }
     }
   });

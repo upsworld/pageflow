@@ -10,10 +10,12 @@
 
       element.addClass('js').append(overlays);
 
+      element.find('.parent_page').parentPageButton();
+
       $('a.navigation_top', element).topButton();
 
       $('.navigation_bar_bottom', element)
-        .append($('.navigation_bar_top > li', element).slice(hasHomeButton ? 4 : 3));
+        .append($('.navigation_bar_top > li', element).slice(hasHomeButton ? 5 : 4));
 
 
       $('.navigation_volume_box', element).volumeSlider({orientation: 'h'});

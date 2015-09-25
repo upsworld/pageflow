@@ -1005,6 +1005,7 @@ en:
           close_top_navigation: Close navigation
           imprint: Imprint
           navigate_top: Goto first page
+          navigate_back: Back
           open_overview: Overview
           open_top_navigation: Open navigation
           scroll_up: Scroll up

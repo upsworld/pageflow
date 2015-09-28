@@ -83,6 +83,8 @@
           links: $('li > a', sharingMobile),
           scroller: scroller
         });
+
+        element.find('.parent_page').parentPageButton();
       });
     },
 
